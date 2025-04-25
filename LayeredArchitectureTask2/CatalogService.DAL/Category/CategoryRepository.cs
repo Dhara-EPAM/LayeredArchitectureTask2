@@ -42,6 +42,12 @@ namespace CatalogService.DAL.Category
             var entity = _dbContext.Categories.Find(id);
             if (entity != null)
             {
+                //Delete related products
+                var products = _dbContext.Products.ToList().Where(x => x.CategoryId == id);
+                _dbContext.Products.RemoveRange(products);
+                _dbContext.SaveChanges();
+
+                //Delete category
                 _dbContext.Categories.Remove(entity);
                 _dbContext.SaveChanges();
             }
